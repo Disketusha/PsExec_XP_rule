@@ -76,7 +76,7 @@ rule PsExec_Rule: AccessProcess and ServiceCreate+ timer 10s
     
 
         $alert.key = event_src.host + "_Remote_connection"
-        $alert.context = "Remote connection host:" event_src.host + "; With "+ object.type +"("+ object.name + ")"
+        $alert.context = "Remote connection host:" + event_src.host + "; With "+ object.type +"("+ object.name + ")"
     }
 
     on ServiceCreate {
