@@ -1,0 +1,22 @@
+ContentAutoName: Regsvr_Attack_Rule
+ExpertContext:
+    Created: 01.07.2024
+    Updated: 01.07.2024
+    KnowledgeHolders: []
+    Usecases: []
+    Falsepositives: []
+    References: []
+    Improvements: []
+    DataSources:
+        - Provider: Microsoft-Windows-Sysmon
+          EventID:
+              - 1
+        - Provider: Microsoft-Windows-Security-Auditing
+          EventID:
+              - 4688
+ObjectId: SEC-CR-667681162
+ContentRelations:
+    Implements:
+        ATTACK:
+            defense-evasion:
+                - T1218.010
