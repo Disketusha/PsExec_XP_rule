@@ -1,0 +1,4 @@
+Description: 'A remote PsExec startup has been detected, which can be used to run the program on another computer. It is used by IT administrators and intruders'
+EventDescriptions:
+    - LocalizationId: 'corrname_PsExec_Rule'
+      EventDescription: 'First of all, it detects a successful remote connection. After that, it detects the creation of a new service on the target system, which writes parameters to the registry on the path {object.path} with the name of the object {object.name }.'

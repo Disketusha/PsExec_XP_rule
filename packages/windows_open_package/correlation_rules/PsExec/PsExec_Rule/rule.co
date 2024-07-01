@@ -23,15 +23,13 @@ event AccessProcess:
         and status == "success"
     }
 
-rule Myy: AccessProcess and ServiceCreate+ timer 10s
+rule PsExec_Rule: AccessProcess and ServiceCreate+ timer 10s
 
     on AccessProcess {
         $msgid = msgid
-        $event_src.host = event_src.host
-        $event_src.title = event_src.title
+
         $status = status
-        $object.path = object.path 
-        $object.name = object.name
+        
         $subject.account.name = subject.account.name
         $subject.account.domain = subject.account.domain
         $subject.account.fullname = subject.account.fullname
@@ -60,6 +58,8 @@ rule Myy: AccessProcess and ServiceCreate+ timer 10s
         $object.process.guid = object.process.guid
         $object.path = object.path
 
+        $object.name = object.name
+
         $datafield5 = datafield5            # Идентификатор потока субъекта
         $datafield9 = datafield9            # Цепочка вызовов процесса
 
@@ -75,15 +75,17 @@ rule Myy: AccessProcess and ServiceCreate+ timer 10s
         $event_src.rule = event_src.rule
     
 
-        $alert.key = 123
-        $alert.context = 123
+        $alert.key = event_src.host + "_Remote_connection"
+        $alert.context = "Remote connection host:" event_src.host + "; With "+ object.type +"("+ object.name + ")"
     }
 
     on ServiceCreate {
         $msgid = msgid
-        $object.path = object.path 
-        $object.name = object.name
+
+        $action = "create"
+
         $status = status
+
         $subject.account.name = subject.account.name
         $subject.account.domain = subject.account.domain
         $subject.account.fullname = subject.account.fullname
@@ -112,6 +114,8 @@ rule Myy: AccessProcess and ServiceCreate+ timer 10s
         $object.process.guid = object.process.guid
         $object.path = object.path
 
+        $object.name = object.name
+
         $datafield5 = datafield5            # Идентификатор потока субъекта
         $datafield9 = datafield9            # Цепочка вызовов процесса
 
@@ -127,23 +131,22 @@ rule Myy: AccessProcess and ServiceCreate+ timer 10s
         $event_src.rule = event_src.rule
     
 
-        $alert.key = 123
-        $alert.context = 123
+        $alert.key = event_src.host + "_Psexec"
+        $alert.context = "Host: "+event_src.host + "; On path:" + object.path + ";" + action + object.name
     }
 
 emit {
     $correlation_type = "event"
 
     $subject = "process"
-    $action = "access"
-    $object = "process"
-    $status = "success"
+    $object = "service"
+    $detect = "CVE-2017-0144"
 
     $importance = "high"
 
     $category.generic = "Attack"
-    $category.high = "System Management"
-    $category.low = "Manipulation"
+    $category.high = "Lateral Movement"
+    $category.low = "Remote Services: SMB/Windows Admin Shares"
 
     $incident.aggregation.key = join([$correlation_name, $event_src.host, $subject.process.fullpath], "|")
     $incident.severity = $importance

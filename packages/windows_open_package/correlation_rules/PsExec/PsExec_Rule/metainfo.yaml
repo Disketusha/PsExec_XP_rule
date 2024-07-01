@@ -1,0 +1,27 @@
+ContentAutoName: PsExec_Rule
+ExpertContext:
+    Created: 01.07.2024
+    Updated: 01.07.2024
+    KnowledgeHolders: []
+    Usecases:
+        - Выявление запуска PsExec через SMB подключение при помощи metasploit
+    Falsepositives: []
+    References:
+        - https://github.com/rapid7/metasploit-framework/blob/master/documentation/modules/exploit/windows/smb/psexec.md
+    Improvements: []
+    DataSources:
+        - Provider: Microsoft-Windows-Sysmon
+          EventID:
+              - 13
+        - Provider: Microsoft-Windows-Security-Auditing
+          EventID:
+              - 4657
+ObjectId: SEC-CR-806091652
+ContentRelations:
+    Implements:
+        ATTACK:
+            lateral-movement:
+                - T1021.002
+EventDescriptions:
+    - Criteria: correlation_name = "PsExec_Rule"
+      LocalizationId: corrname_PsExec_Rule
